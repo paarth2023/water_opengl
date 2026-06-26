@@ -110,7 +110,8 @@ int main()
 
     createCircle(512, ballRadius);
 
-    VertexBuffer vb(points.data(), points.size() * sizeof(glm::vec3));
+    VertexBuffer vb;
+    vb.Init(points.data(), points.size() * sizeof(glm::vec3));
 
     BufferLayout layout;
     layout.Push<float>(3);
