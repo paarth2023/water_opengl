@@ -9,30 +9,25 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "../renderer/CircleRenderer.h"
 
 unsigned int screen_width = 1280;
 unsigned int screen_height = 720;
 
 // global variables stating where the circle begins and other things.
 // needed for gravity simulation.
-float posY = 0.8f;
-float velY = 0.0f;
-float gravity = -1.5f;
-float restitution = 1.0f;
-float floorY = -1.0f;
-float ballRadius = 0.2f;
 
-void updatePhysics(float deltatime)
-{
-    velY += gravity * deltatime;
-    posY += velY * deltatime;
+// void updatePhysics(float deltatime)
+// {
+//     velY += gravity * deltatime;
+//     posY += velY * deltatime;
 
-    if (posY - ballRadius < floorY)
-    {
-        posY = floorY + ballRadius;
-        velY = -velY * restitution;
-    }
-}
+//     if (posY - ballRadius < floorY)
+//     {
+//         posY = floorY + ballRadius;
+//         velY = -velY * restitution;
+//     }
+// }
 
 // setting up points for drawing a circle.
 std::vector<glm::vec3> points;
@@ -62,26 +57,26 @@ void resize_callback(GLFWwindow *window, int width, int height)
 }
 
 // callback for controlling restitution
-void restitution_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS || action == GLFW_REPEAT)
-    {
-        if (key == GLFW_KEY_K)
-        {
-            restitution += 0.01f;
-            if (restitution > 1.0f)
-                restitution = 1.0f;
-            std::cout << "Restitution increased to " << restitution << std::endl;
-        }
-        if (key == GLFW_KEY_J)
-        {
-            restitution -= 0.01f;
-            if (restitution < 0.0f)
-                restitution = 0.0f;
-            std::cout << "Restitution decreased to " << restitution << std::endl;
-        }
-    }
-}
+// void restitution_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+// {
+//     if (action == GLFW_PRESS || action == GLFW_REPEAT)
+//     {
+//         if (key == GLFW_KEY_K)
+//         {
+//             restitution += 0.01f;
+//             if (restitution > 1.0f)
+//                 restitution = 1.0f;
+//             std::cout << "Restitution increased to " << restitution << std::endl;
+//         }
+//         if (key == GLFW_KEY_J)
+//         {
+//             restitution -= 0.01f;
+//             if (restitution < 0.0f)
+//                 restitution = 0.0f;
+//             std::cout << "Restitution decreased to " << restitution << std::endl;
+//         }
+//     }
+// }
 
 int main()
 {
@@ -104,20 +99,45 @@ int main()
     }
 
     glfwSetFramebufferSizeCallback(window, resize_callback);
-    glfwSetKeyCallback(window, restitution_callback);
+    // glfwSetKeyCallback(window, restitution_callback);
 
     Shader ourShader("./shader_files/vertex.glsl", "./shader_files/fragment.glsl");
 
-    createCircle(512, ballRadius);
+    // createCircle(512, ballRadius);
 
-    VertexBuffer vb;
-    vb.Init(points.data(), points.size() * sizeof(glm::vec3));
+    // VertexBuffer vb;
+    // vb.Init(points.data(), points.size() * sizeof(glm::vec3));
 
-    BufferLayout layout;
-    layout.Push<float>(3);
+    // BufferLayout layout;
+    // layout.Push<float>(3);
 
-    VertexArray va;
-    va.AddBuffer(vb, layout);
+    // VertexArray va;
+    // va.AddBuffer(vb, layout);
+    CircleRenderer cr;
+    std::vector<CircleGeometry> circles;
+
+    int rows = 20, cols = 50;
+    float radius = 0.02f;
+    float spacing = 0.06f; // gap between centers, 3x the radius
+
+    // compute total grid size and center it around (0,0) in NDC
+    float totalW = (cols - 1) * spacing;
+    float totalH = (rows - 1) * spacing;
+    float startX = -totalW / 2.0f;
+    float startY = -totalH / 2.0f;
+
+    for (int row = 0; row < rows; row++)
+    {
+        for (int col = 0; col < cols; col++)
+        {
+            glm::vec2 center = {
+                startX + col * spacing,
+                startY + row * spacing};
+            circles.push_back({center, radius});
+        }
+    }
+
+    cr.Init(circles, 8);
 
     float aspect = (float)screen_width / (float)screen_height;
 
@@ -130,18 +150,19 @@ int main()
 
         glm::mat4 projection = glm::ortho(-aspect, aspect, -1.0f, 1.0f, -1.0f, 1.0f);
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, posY, 0.0f));
-        float currTime = glfwGetTime();
-        float delta_time = currTime - lastTime;
-        lastTime = currTime;
-        updatePhysics(delta_time);
+        // model = glm::translate(model, glm::vec3(0.0f, posY, 0.0f));
+        // float currTime = glfwGetTime();
+        // float delta_time = currTime - lastTime;
+        // lastTime = currTime;
+        // updatePhysics(delta_time);
 
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("model", model);
 
-        va.Bind();
-        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(points.size()));
+        // va.Bind();
+        // glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(points.size()));
+        cr.Draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
