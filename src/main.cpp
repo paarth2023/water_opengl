@@ -118,9 +118,7 @@ int main()
 
     int rows = 20, cols = 50;
     float radius = 0.02f;
-    float spacing = 0.06f; // gap between centers, 3x the radius
-
-    // compute total grid size and center it around (0,0) in NDC
+    float spacing = 0.06f;
     float totalW = (cols - 1) * spacing;
     float totalH = (rows - 1) * spacing;
     float startX = -totalW / 2.0f;
@@ -128,12 +126,17 @@ int main()
 
     for (int row = 0; row < rows; row++)
     {
+        // float blue = (float)row / (rows - 1);
+        // float red = (float)(row) / 2 * (rows - 1);
+        // float green = (float)(row * row) / (rows - 1) * (rows - 1);
+        // float red = blue, green = blue;
         for (int col = 0; col < cols; col++)
         {
+            glm::vec3 color = glm::vec3(0.0f, 0.0f, 1.0f);
             glm::vec2 center = {
                 startX + col * spacing,
                 startY + row * spacing};
-            circles.push_back({center, radius});
+            circles.push_back({center, radius, color});
         }
     }
 
