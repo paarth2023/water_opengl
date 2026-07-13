@@ -39,7 +39,10 @@ set_target_properties(water PROPERTIES
 )
 target_include_directories(water PRIVATE "glad/include")
 
+find_package(OpenGL REQUIRED)
+
 target_link_libraries(water PRIVATE 
     glfw
     glm
+    OpenGL::GL
 )
