@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include <vector>
 #include <iostream>
-#include "../renderer/shader.h"
+#include "../renderer/Shader.h"
 #include "../renderer/VertexBuffer.h"
 #include "../renderer/BufferLayout.h"
 #include "../renderer/VertexArray.h"
