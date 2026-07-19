@@ -9,12 +9,14 @@ struct CircleGeometry
     glm::vec2 center;
     float radius;
     glm::vec3 color;
+    glm::vec3 translation;
 };
 
 struct CircleInstance
 {
     glm::vec3 position;
     glm::vec3 color;
+    glm::vec3 translation;
 };
 
 class CircleRenderer

@@ -4,6 +4,7 @@ out/
 cmake-build-*/
 
 glad/
+water
 
 # CMake generated files
 CMakeCache.txt

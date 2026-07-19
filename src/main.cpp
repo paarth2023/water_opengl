@@ -14,69 +14,10 @@
 unsigned int screen_width = 1280;
 unsigned int screen_height = 720;
 
-// global variables stating where the circle begins and other things.
-// needed for gravity simulation.
-
-// void updatePhysics(float deltatime)
-// {
-//     velY += gravity * deltatime;
-//     posY += velY * deltatime;
-
-//     if (posY - ballRadius < floorY)
-//     {
-//         posY = floorY + ballRadius;
-//         velY = -velY * restitution;
-//     }
-// }
-
-// setting up points for drawing a circle.
-std::vector<glm::vec3> points;
-
-void createCircle(int numPoints, float radius)
-{
-    float angle = (360.0f / numPoints);
-    std::vector<glm::vec3> temp;
-    for (int i = 0; i < numPoints; i++)
-    {
-        float x = radius * glm::cos(glm::radians(angle * i));
-        float y = radius * glm::sin(glm::radians(angle * i));
-        temp.push_back(glm::vec3(x, y, 0.0f));
-    }
-
-    for (int i = 0; i < numPoints - 2; i++)
-    {
-        points.push_back(temp[0]);
-        points.push_back(temp[i + 1]);
-        points.push_back(temp[(i + 2) % numPoints]);
-    }
-}
-
 void resize_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
-
-// callback for controlling restitution
-// void restitution_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-// {
-//     if (action == GLFW_PRESS || action == GLFW_REPEAT)
-//     {
-//         if (key == GLFW_KEY_K)
-//         {
-//             restitution += 0.01f;
-//             if (restitution > 1.0f)
-//                 restitution = 1.0f;
-//             std::cout << "Restitution increased to " << restitution << std::endl;
-//         }
-//         if (key == GLFW_KEY_J)
-//         {
-//             restitution -= 0.01f;
-//             if (restitution < 0.0f)
-//                 restitution = 0.0f;
-//             std::cout << "Restitution decreased to " << restitution << std::endl;
-//         }
-//     }
-// }
 
 int main()
 {
@@ -99,46 +40,14 @@ int main()
     }
 
     glfwSetFramebufferSizeCallback(window, resize_callback);
-    // glfwSetKeyCallback(window, restitution_callback);
 
     Shader ourShader("./shader_files/vertex.glsl", "./shader_files/fragment.glsl");
 
-    // createCircle(512, ballRadius);
-
-    // VertexBuffer vb;
-    // vb.Init(points.data(), points.size() * sizeof(glm::vec3));
-
-    // BufferLayout layout;
-    // layout.Push<float>(3);
-
-    // VertexArray va;
-    // va.AddBuffer(vb, layout);
     CircleRenderer cr;
     std::vector<CircleGeometry> circles;
 
-    int rows = 20, cols = 50;
-    float radius = 0.02f;
-    float spacing = 0.06f;
-    float totalW = (cols - 1) * spacing;
-    float totalH = (rows - 1) * spacing;
-    float startX = -totalW / 2.0f;
-    float startY = -totalH / 2.0f;
-
-    for (int row = 0; row < rows; row++)
-    {
-        // float blue = (float)row / (rows - 1);
-        // float red = (float)(row) / 2 * (rows - 1);
-        // float green = (float)(row * row) / (rows - 1) * (rows - 1);
-        // float red = blue, green = blue;
-        for (int col = 0; col < cols; col++)
-        {
-            glm::vec3 color = glm::vec3(0.0f, 0.0f, 1.0f);
-            glm::vec2 center = {
-                startX + col * spacing,
-                startY + row * spacing};
-            circles.push_back({center, radius, color});
-        }
-    }
+    circles.push_back({glm::vec2(-0.5f, 0.0f), 0.02f, glm::vec3(1.0f, 0.0f, 0.0f), 
+        glm::vec3(0.0f, 0.0f, 0.0f)});
 
     cr.Init(circles, 8);
 
@@ -153,18 +62,11 @@ int main()
 
         glm::mat4 projection = glm::ortho(-aspect, aspect, -1.0f, 1.0f, -1.0f, 1.0f);
         glm::mat4 model = glm::mat4(1.0f);
-        // model = glm::translate(model, glm::vec3(0.0f, posY, 0.0f));
-        // float currTime = glfwGetTime();
-        // float delta_time = currTime - lastTime;
-        // lastTime = currTime;
-        // updatePhysics(delta_time);
 
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("model", model);
 
-        // va.Bind();
-        // glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(points.size()));
         cr.Draw();
 
         glfwSwapBuffers(window);
