@@ -1,5 +1,9 @@
 #include "VertexArray.h"
 
+/*
+This file implements all the functions in the included header file.
+*/
+
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &render_id);
@@ -19,7 +23,7 @@ void VertexArray::AddBuffer(const VertexBuffer &vb, const BufferLayout &layout)
 
     const auto &attributes = layout.GetAttributes();
 
-    for (unsigned int i = 0; i < attributes.size(); i++)
+    for (unsigned int i = 0; i < attributes.size(); i++) // this for loop is what tells the gpu about the layout of the memory allocated on the gpu
     {
         const auto &attr = attributes[i];
         glEnableVertexAttribArray(i);

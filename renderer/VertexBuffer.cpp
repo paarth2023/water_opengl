@@ -1,5 +1,9 @@
 #include "VertexBuffer.h"
 
+/*
+This class implements the vertexbuffer class from the header file.
+*/
+
 VertexBuffer::VertexBuffer(const void *data, unsigned int size)
 {
     glGenBuffers(1, &renderer_id);
