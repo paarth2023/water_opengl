@@ -16,12 +16,12 @@ void resize_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-struct Particle {
-    glm::vec3 center;
-    float radius;
-    glm::vec3 color;
-    // to be added -> density, velocity, etc.
-};
+// struct Particle {
+//     glm::vec3 center;
+//     float radius;
+//     glm::vec3 color;
+//     // to be added -> density, velocity, etc.
+// };
 
 int main()
 {
