@@ -14,17 +14,20 @@ struct Particle {
 class Mesh {
 public:
     std::vector<Particle> particles;
+    VertexArray* va;
+    VertexBuffer* vb;
     Mesh(std::vector<Particle> particles);
+    ~Mesh();
     void draw(Shader &shader);
 private:
     void setupMesh()
     {
-        VertexBuffer vb(particles.data(), sizeof(Particle));
+        vb = new VertexBuffer(particles.data(), sizeof(Particle));
         BufferLayout layout;
         layout.Push<float>(3);
         layout.Push<float>(1);
         layout.Push<float>(3);
-        VertexArray va;
-        va.AddBuffer(vb, layout);
+        va = new VertexArray();
+        va->AddBuffer(*vb, layout);
     }
 };
