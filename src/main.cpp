@@ -49,11 +49,26 @@ int main()
     Shader ourShader("./shader_files/vertex.glsl", "./shader_files/fragment.glsl");
     Shader newShader("./shader_files/circle_vertex.glsl", "./shader_files/circle_fragment.glsl");
 
-    Particle p1 = {
-        glm::vec3(0.0f, -0.0f, 0.0f),
-        0.25f,
-        glm::vec3(0.0f, 1.0f, 1.0f)};
-    std::vector<Particle> particles = {p1};
+    float radius = 0.02f;
+    glm::vec3 color = glm::vec3(0.0f, 1.0f, 1.0f);
+
+    Particle start = {
+        glm::vec3(-0.25f, 0.0f, 0.0f),
+        radius,
+        color};
+    float width = 0.5f;
+    float height = 0.75f;
+    float spacing = 0.02f;
+    std::vector<Particle> particles; 
+    Particle temp;
+    float x_end = start.center.x + width;
+    float y_end = start.center.y + height;
+    for (float x = start.center.x; x <= x_end; x += spacing) {
+        for (float y = start.center.y; y <= y_end; y += spacing) {
+            temp = {glm::vec3(x, y, 0.0f), radius, color};
+            particles.push_back(temp);
+        }
+    }
     VertexBuffer vb1(particles.data(), particles.size() * sizeof(Particle));
     BufferLayout layout1;
     layout1.Push<float>(3);
@@ -61,17 +76,17 @@ int main()
     layout1.Push<float>(3);
     VertexArray va1;
     va1.AddBuffer(vb1, layout1);
-    std::vector<glm::vec3> points = {
-        glm::vec3(-0.5, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.5f, 0.0f),
-        glm::vec3(0.5f, 0.0f, 0.0f)};
-    VertexBuffer vb(points.data(), points.size() * sizeof(glm::vec3));
+    // std::vector<glm::vec3> points = {
+    //     glm::vec3(-0.5, 0.0f, 0.0f),
+    //     glm::vec3(0.0f, 0.5f, 0.0f),
+    //     glm::vec3(0.5f, 0.0f, 0.0f)};
+    // VertexBuffer vb(points.data(), points.size() * sizeof(glm::vec3));
 
-    BufferLayout layout;
-    layout.Push<float>(3);
+    // BufferLayout layout;
+    // layout.Push<float>(3);
 
-    VertexArray va;
-    va.AddBuffer(vb, layout);
+    // VertexArray va;
+    // va.AddBuffer(vb, layout);
 
     while (!glfwWindowShouldClose(window))
     {
