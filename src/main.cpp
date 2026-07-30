@@ -50,9 +50,9 @@ int main()
     Shader newShader("./shader_files/circle_vertex.glsl", "./shader_files/circle_fragment.glsl");
 
     Particle p1 = {
-        glm::vec3(0.0f, -0.25f, 0.0f),
+        glm::vec3(0.0f, -0.0f, 0.0f),
         0.25f,
-        glm::vec3(0.0f, 0.0f, 1.0f)};
+        glm::vec3(0.0f, 1.0f, 1.0f)};
     std::vector<Particle> particles = {p1};
     VertexBuffer vb1(particles.data(), particles.size() * sizeof(Particle));
     BufferLayout layout1;
@@ -91,9 +91,9 @@ int main()
         glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(particles.size()));
 
         // 3. DRAW TRIANGLES
-        ourShader.use();
-        va.Bind();
-        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(points.size()));
+        // ourShader.use();
+        // va.Bind();
+        // glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(points.size()));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
