@@ -5,7 +5,6 @@
 #include "../renderer/VertexBuffer.h"
 #include "../renderer/BufferLayout.h"
 #include "../renderer/VertexArray.h"
-#include "../renderer/CircleMesh.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -16,6 +15,12 @@ void resize_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
+
+struct Particle {
+    glm::vec3 center;
+    float radius;
+    glm::vec3 color;
+};
 
 // struct Particle {
 //     glm::vec3 center;
