@@ -55,19 +55,8 @@ int main()
         glm::vec3(-0.25f, 0.0f, 0.0f),
         radius,
         color};
-    float width = 0.5f;
-    float height = 0.75f;
-    float spacing = 0.02f;
-    std::vector<Particle> particles; 
-    Particle temp;
-    float x_end = start.center.x + width;
-    float y_end = start.center.y + height;
-    for (float x = start.center.x; x <= x_end; x += spacing) {
-        for (float y = start.center.y; y <= y_end; y += spacing) {
-            temp = {glm::vec3(x, y, 0.0f), radius, color};
-            particles.push_back(temp);
-        }
-    }
+    std::vector<Particle> particles;
+    particles.push_back(start);
     VertexBuffer vb1(particles.data(), particles.size() * sizeof(Particle));
     BufferLayout layout1;
     layout1.Push<float>(3);

@@ -29,8 +29,7 @@ add_executable(water "src/main.cpp" "glad/src/glad.c"
     renderer/BufferLayout.h
     renderer/VertexArray.h
     renderer/VertexArray.cpp
-    renderer/CircleMesh.h
-    renderer/CircleMesh.cpp)
+)
 
 set_target_properties(water PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
